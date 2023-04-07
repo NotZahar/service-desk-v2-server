@@ -1,11 +1,12 @@
 import { ApiProperty } from "@nestjs/swagger";
 import sequelize from "sequelize";
-import { Column, DataType, Model, Table } from "sequelize-typescript";
+import { BelongsTo, Column, DataType, ForeignKey, Model, Table } from "sequelize-typescript";
+import { RoleModel } from "src/roles/roles.model";
 
 interface CustomerCreationAttrs {
     email: string;
     password: string;
-    role: ;
+    role_id: string;
     first_name: string;
     second_name: string;
 }
@@ -13,8 +14,8 @@ interface CustomerCreationAttrs {
 @Table({ tableName: 'customers' })
 export class CustomerModel extends Model<CustomerModel, CustomerCreationAttrs> {
     @ApiProperty({ example: '123e4567-e89b-12d3-a456-426614174000', description: 'Unique id' })
-    @Column({ type: DataType.UUID, defaultValue: sequelize.UUIDV4, primaryKey: true })
-    id: number;
+    @Column({ type: DataType.UUID, primaryKey: true, defaultValue: sequelize.UUIDV4 })
+    id: string;
 
     @ApiProperty({ example: 'customer@mail.com', description: 'E-mail' })
     @Column({ type: DataType.STRING, unique: true, allowNull: false })
@@ -24,9 +25,10 @@ export class CustomerModel extends Model<CustomerModel, CustomerCreationAttrs> {
     @Column({ type: DataType.STRING, allowNull: false })
     password: string;
 
-    @ApiProperty({ example: 'customer', description: 'Role [only \'customer\']' })
-    @Column({ type: , defaultValue: , allowNull: false }) // TODO: !!
-    role: ;
+    @ApiProperty({ example: 'Customer\'s role id', description: 'Role id [only \'customer\']' })
+    @ForeignKey(() => RoleModel)
+    @Column({ type: DataType.UUID, unique: true, allowNull: false, defaultValue: sequelize.UUIDV4 })
+    role_id: string;
 
     @ApiProperty({ example: 'Zahar', description: 'First name' })
     @Column({ type: DataType.STRING, allowNull: false })
@@ -47,4 +49,7 @@ export class CustomerModel extends Model<CustomerModel, CustomerCreationAttrs> {
     @ApiProperty({ example: 'PJSC Gazprom', description: 'Customer\'s organization' })
     @Column({ type: DataType.STRING, allowNull: true })
     organization: string;
+    
+    @BelongsTo(() => RoleModel)
+    role: RoleModel;
 }
