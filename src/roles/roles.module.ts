@@ -10,6 +10,9 @@ import { CustomerModel } from 'src/customers/customers.model';
   providers: [RolesService],
   imports: [
     SequelizeModule.forFeature([RoleModel, CustomerModel])
+  ],
+  exports: [
+    RolesService
   ]
 })
 export class RolesModule {}

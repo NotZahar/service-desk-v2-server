@@ -5,6 +5,7 @@ import { CustomerModel } from "./customers/customers.model";
 import { CustomersModule } from './customers/customers.module';
 import { RolesModule } from './roles/roles.module';
 import { RoleModel } from "./roles/roles.model";
+import { AuthModule } from './auth/auth.module';
 
 @Module({
     controllers: [],
@@ -25,6 +26,7 @@ import { RoleModel } from "./roles/roles.model";
         }),
         CustomersModule,
         RolesModule,
+        AuthModule,
     ]
 })
 

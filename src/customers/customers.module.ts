@@ -4,12 +4,15 @@ import { CustomersController } from './customers.controller';
 import { CustomerModel } from './customers.model';
 import { CustomersService } from './customers.service';
 import { RoleModel } from 'src/roles/roles.model';
+import { RolesModule } from 'src/roles/roles.module';
 
 @Module({
   controllers: [CustomersController],
   providers: [CustomersService],
   imports: [
-    SequelizeModule.forFeature([CustomerModel, RoleModel])
-  ]
+    SequelizeModule.forFeature([CustomerModel, RoleModel]),
+    RolesModule
+  ],
+  exports: [CustomersService]
 })
 export class CustomersModule {}
