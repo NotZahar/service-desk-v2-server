@@ -1,5 +1,8 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Roles } from 'src/auth/roles-auth.decorator';
+import { RolesGuard } from 'src/auth/roles.guard';
+import { Role } from 'src/roles/roles-list';
 import { CustomerModel } from './customers.model';
 import { CustomersService } from './customers.service';
 import { CreateCustomerDto } from './dto/create-customer.dto';
@@ -18,6 +21,8 @@ export class CustomersController {
 
     @ApiOperation({ summary: 'Get all customers' })
     @ApiResponse({ status: 200, type: [CustomerModel] })
+    @Roles(Role.DISPATCHER)
+    @UseGuards(RolesGuard)
     @Get()
     getAll() {
         return this.customersService.getAllCustomers();

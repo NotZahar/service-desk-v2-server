@@ -1,4 +1,7 @@
-enum AuthErrorMessage {
-    UserWithThisEmailAlreadyExists = 'User with this email already exists',
-    UserNotFound = 'User with this email does not exists'
+export enum AuthErrorMessage {
+    UserWithThisEmailAlreadyExists = 'Пользователь с таким email уже существует',
+    EmailOrPasswordAreWrong = 'Некорректный email или пароль',
+    GeneralGuard = 'Ошибка аутентификации',
+    AuthTokenNotFound = 'Ошибка аутентификации (token not found)',
+    NoAccess = 'Нет доступа'
 }

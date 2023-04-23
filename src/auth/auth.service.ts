@@ -2,12 +2,14 @@ import { HttpException, HttpStatus, Injectable, UnauthorizedException } from '@n
 import { JwtService } from '@nestjs/jwt';
 import { CustomersService } from 'src/customers/customers.service';
 import { CreateCustomerDto } from 'src/customers/dto/create-customer.dto';
-import bcrypt from 'bcrypt';
+import * as bcrypt from 'bcrypt';
 import { CustomerModel } from 'src/customers/customers.model';
+import { AuthErrorMessage } from 'src/errors/auth-errors';
 
 @Injectable()
 export class AuthService {
-    constructor(private customerService: CustomersService,
+    constructor(
+        private customerService: CustomersService,
         private jwtService: JwtService) {}
 
     async loginCustomer(customerDto: CreateCustomerDto) {
@@ -35,9 +37,9 @@ export class AuthService {
 
     private async validateCustomer(customerDto: CreateCustomerDto) {
         const customer = await this.customerService.getCustomerByEmail(customerDto.email);
-        if (!customer) throw new UnauthorizedException({ message: AuthErrorMessage.UserNotFound });
-        const passwordEquals = await bcrypt.compare(customerDto.password, customer.password);
-        if (passwordEquals) return customer;
-        throw new UnauthorizedException({ message: AuthErrorMessage. });
+        if (!customer) throw new UnauthorizedException({ message: AuthErrorMessage.EmailOrPasswordAreWrong });
+        const passwordsAreEqual = await bcrypt.compare(customerDto.password, customer.password);
+        if (passwordsAreEqual) return customer;
+        throw new UnauthorizedException({ message: AuthErrorMessage.EmailOrPasswordAreWrong });
     }
 }

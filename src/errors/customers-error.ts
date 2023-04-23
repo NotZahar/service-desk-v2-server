@@ -1,3 +1,3 @@
-enum CustomersErrorMessage {
+export enum CustomersErrorMessage {
     
 }

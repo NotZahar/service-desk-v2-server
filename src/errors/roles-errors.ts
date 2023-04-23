@@ -1,3 +1,3 @@
-enum RolesErrorMessage {
-    RoleNotFound = 'Role not found'
+export enum RolesErrorMessage {
+    RoleNotFound = 'Роль не найдена'
 }

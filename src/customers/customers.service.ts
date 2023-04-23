@@ -4,6 +4,7 @@ import { RolesService } from 'src/roles/roles.service';
 import { Role } from 'src/roles/roles-list';
 import { CustomerModel } from './customers.model';
 import { CreateCustomerDto } from './dto/create-customer.dto';
+import { RolesErrorMessage } from 'src/errors/roles-errors';
 
 @Injectable()
 export class CustomersService {
@@ -11,10 +12,9 @@ export class CustomersService {
                 private roleService: RolesService) {}
 
     async createCustomer(dto: CreateCustomerDto): Promise<CustomerModel> {
-        const customer = await this.customerRepository.create(dto);
-        const role = await this.roleService.getRoleByName(Role.CUSTOMER);        
+        const role = await this.roleService.getRoleByName(Role.CUSTOMER);
         if (!role) throw new Error(RolesErrorMessage.RoleNotFound);
-        await customer.$set('role_id', role.id);
+        const customer = await this.customerRepository.create({ ...dto, role_id: role.id });
         customer.role = role;
         return customer;
     }
