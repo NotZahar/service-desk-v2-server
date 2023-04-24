@@ -14,7 +14,7 @@ export class AuthController {
     }
 
     @Post('/registration-customer')
-    registrationCustomer(@Body() customerDto: CreateCustomerDto) {
+    registrationCustomer(@Body() customerDto: CreateCustomerDto) { // TODO: change to another DTO
         return this.authService.registrationCustomer(customerDto);
     }
 
