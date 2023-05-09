@@ -18,6 +18,8 @@ export class GeneralValidationPipe implements PipeTransform {
             });
             throw new ValidationException(messages);
         }
+
+        return value;
     }
 
     private toValidate(metatype: Function): boolean {

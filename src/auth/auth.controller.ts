@@ -1,6 +1,7 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateCustomerDto } from 'src/customers/dto/create-customer.dto';
+import { LoginCustomerDto } from 'src/customers/dto/login-customer.dto';
 import { AuthService } from './auth.service';
 
 @ApiTags('Авторизация')
@@ -9,13 +10,13 @@ export class AuthController {
     constructor(private authService: AuthService) {}
     
     @Post('/login-customer')
-    loginCustomer(@Body() customerDto: CreateCustomerDto) {
-        return this.authService.loginCustomer(customerDto);
+    loginCustomer(@Body() loginCustomerDto: LoginCustomerDto) {
+        return this.authService.loginCustomer(loginCustomerDto);
     }
 
     @Post('/registration-customer')
-    registrationCustomer(@Body() customerDto: CreateCustomerDto) { // TODO: change to another DTO
-        return this.authService.registrationCustomer(customerDto);
+    registrationCustomer(@Body() createCustomerDto: CreateCustomerDto) {
+        return this.authService.registrationCustomer(createCustomerDto);
     }
 
     // @Post('/login-employee')

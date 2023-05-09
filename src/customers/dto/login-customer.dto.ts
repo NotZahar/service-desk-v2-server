@@ -3,7 +3,7 @@ import { IsEmail, IsString, MinLength } from "class-validator";
 import { authConfig } from "src/auth/auth-config";
 import { ValidationMessage } from "src/errors/validation-messages";
 
-export class CreateCustomerDto { 
+export class LoginCustomerDto { 
     @ApiProperty({ example: 'customer@mail.com', description: 'E-mail' })
     @IsString({ message: ValidationMessage.MustBeString })
     @IsEmail({}, { message: ValidationMessage.MustBeEmail })
@@ -13,12 +13,4 @@ export class CreateCustomerDto {
     @IsString({ message: ValidationMessage.MustBeString })
     @MinLength( authConfig.PASSWORD_MIN_LENGTH, { message: ValidationMessage.PasswordConstraint } )
     readonly password: string;
-
-    @ApiProperty({ example: 'Zahar', description: 'First name' })
-    @IsString({ message: ValidationMessage.MustBeString })
-    readonly first_name: string;
-
-    @ApiProperty({ example: 'Glushkin', description: 'Second (last) name' })
-    @IsString({ message: ValidationMessage.MustBeString })
-    readonly second_name: string;
 }

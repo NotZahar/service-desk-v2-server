@@ -5,6 +5,7 @@ import { CreateCustomerDto } from 'src/customers/dto/create-customer.dto';
 import * as bcrypt from 'bcrypt';
 import { CustomerModel } from 'src/customers/customers.model';
 import { AuthErrorMessage } from 'src/errors/auth-errors';
+import { LoginCustomerDto } from 'src/customers/dto/login-customer.dto';
 
 @Injectable()
 export class AuthService {
@@ -12,8 +13,8 @@ export class AuthService {
         private customerService: CustomersService,
         private jwtService: JwtService) {}
 
-    async loginCustomer(customerDto: CreateCustomerDto) {
-        const customer = await this.validateCustomer(customerDto);
+    async loginCustomer(loginCustomerDto: LoginCustomerDto) {
+        const customer = await this.validateCustomer(loginCustomerDto);
         return this.generateToken(customer);
     }
 
@@ -34,11 +35,11 @@ export class AuthService {
         
         return this.jwtService.sign(payload);
     }
-
-    private async validateCustomer(customerDto: CreateCustomerDto) {
-        const customer = await this.customerService.getCustomerByEmail(customerDto.email);
+ 
+    private async validateCustomer(loginCustomerDto: LoginCustomerDto) {
+        const customer = await this.customerService.getCustomerByEmail(loginCustomerDto.email);
         if (!customer) throw new UnauthorizedException({ message: AuthErrorMessage.EmailOrPasswordAreWrong });
-        const passwordsAreEqual = await bcrypt.compare(customerDto.password, customer.password);
+        const passwordsAreEqual = await bcrypt.compare(loginCustomerDto.password, customer.password);
         if (passwordsAreEqual) return customer;
         throw new UnauthorizedException({ message: AuthErrorMessage.EmailOrPasswordAreWrong });
     }

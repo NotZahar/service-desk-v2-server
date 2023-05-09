@@ -26,7 +26,10 @@ export class RolesGuard implements CanActivate {
             if (!token) throw new UnauthorizedException({ message: AuthErrorMessage.AuthTokenNotFound });
             const user = this.jwtService.verify(token);
             req.user = user;
-            return requiredRoles.includes(user.role.name);
+            
+            if (!requiredRoles.includes(user.role.name)) throw new Error(AuthErrorMessage.NoAccess);
+            
+            return true;
         } catch (err) {
             console.log(err);
             throw new HttpException(AuthErrorMessage.NoAccess, HttpStatus.FORBIDDEN);
