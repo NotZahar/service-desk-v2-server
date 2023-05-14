@@ -21,7 +21,7 @@ export class CreateCustomerDto {
     readonly patronymic: string;
     
     @IsString({ message: ValidationMessage.MustBeString })
-    @IsMobilePhone('ru-RU')
+    @IsMobilePhone('ru-RU', undefined, { message: ValidationMessage.MustBePhoneNumber })
     readonly phone_number: string;
     
     @IsString({ message: ValidationMessage.MustBeString })

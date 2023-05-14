@@ -14,7 +14,7 @@ export class GeneralValidationPipe implements PipeTransform {
         if (errors.length) {
             const messages = errors.map(err => {
                 if (!err.constraints) throw new Error('No constraints');
-                return `${err.property}: ${Object.values(err.constraints).join(', ')}`;
+                return `${Object.values(err.constraints).join(', ')}`;
             });
             throw new ValidationException(messages);
         }
