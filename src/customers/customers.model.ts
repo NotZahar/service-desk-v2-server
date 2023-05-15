@@ -25,7 +25,7 @@ export class CustomerModel extends Model<CustomerModel, CustomerCreationAttrs> {
     password: string;
 
     @ForeignKey(() => RoleModel)
-    @Column({ type: DataType.UUID, unique: true, allowNull: false, defaultValue: sequelize.UUIDV4 })
+    @Column({ type: DataType.UUID, allowNull: false })
     role_id: string;
 
     @Column({ type: DataType.STRING, allowNull: false })

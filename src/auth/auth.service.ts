@@ -18,12 +18,17 @@ export class AuthService {
         return this.generateToken(customer);
     }
 
-    async registrationCustomer(customerDto: CreateCustomerDto) {
-        const candidate = await this.customerService.getCustomerByEmail(customerDto.email);
-        if (candidate) throw new HttpException(AuthErrorMessage.UserWithThisEmailAlreadyExists, HttpStatus.BAD_REQUEST);
-        const hashPassword = await bcrypt.hash(customerDto.password, 10);
-        const customer = await this.customerService.createCustomer({ ...customerDto, password: hashPassword });
-        return this.generateToken(customer);
+    async registrationCustomer(customerDto: CreateCustomerDto) : Promise<string | undefined> {
+        try {
+            const candidate = await this.customerService.getCustomerByEmail(customerDto.email);
+            if (candidate) throw new HttpException(AuthErrorMessage.UserWithThisEmailAlreadyExists, HttpStatus.BAD_REQUEST);
+            const hashPassword = await bcrypt.hash(customerDto.password, 10);
+            const customer = await this.customerService.createCustomer({ ...customerDto, password: hashPassword });
+            return this.generateToken(customer);
+        } catch (error) {
+            if (error instanceof HttpException) throw new HttpException(error.getResponse(), error.getStatus());
+            throw new HttpException(AuthErrorMessage.InternalError, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     private async generateToken(customerModel: CustomerModel): Promise<string> {

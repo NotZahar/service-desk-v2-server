@@ -1,4 +1,4 @@
-import { IsEmail, IsMobilePhone, IsString, MinLength } from "class-validator";
+import { IsEmail, IsString, MinLength } from "class-validator";
 import { authConfig } from "src/auth/auth-config";
 import { ValidationMessage } from "src/errors/validation-messages";
 
@@ -21,7 +21,6 @@ export class CreateCustomerDto {
     readonly patronymic: string;
     
     @IsString({ message: ValidationMessage.MustBeString })
-    @IsMobilePhone('ru-RU', undefined, { message: ValidationMessage.MustBePhoneNumber })
     readonly phone_number: string;
     
     @IsString({ message: ValidationMessage.MustBeString })
