@@ -6,11 +6,11 @@ interface CustomerCreationAttrs {
     email: string;
     password: string;
     role_id: string;
-    first_name: string;
-    second_name: string;
-    patronymic: string;
-    phone_number: string;
-    organization: string;
+    first_name: string | null;
+    second_name: string | null;
+    patronymic: string | null;
+    phone_number: string | null;
+    organization: string | null;
 }
 
 @Table({ tableName: 'customers' })

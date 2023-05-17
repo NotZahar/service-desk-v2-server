@@ -1,28 +1,21 @@
-import { IsEmail, IsString, MinLength } from "class-validator";
+import { IsEmail, MinLength } from "class-validator";
 import { authConfig } from "src/auth/auth-config";
 import { ValidationMessage } from "src/errors/validation-messages";
 
 export class CreateCustomerDto {
-    @IsString({ message: ValidationMessage.MustBeString })
     @IsEmail({}, { message: ValidationMessage.MustBeEmail })
     readonly email: string;
 
-    @IsString({ message: ValidationMessage.MustBeString })
     @MinLength( authConfig.PASSWORD_MIN_LENGTH, { message: ValidationMessage.PasswordConstraint } )
     readonly password: string;
 
-    @IsString({ message: ValidationMessage.MustBeString })
-    readonly first_name: string;
+    readonly first_name: string | null;
 
-    @IsString({ message: ValidationMessage.MustBeString })
-    readonly second_name: string;
+    readonly second_name: string | null;
 
-    @IsString({ message: ValidationMessage.MustBeString })
-    readonly patronymic: string;
+    readonly patronymic?: string | null;
     
-    @IsString({ message: ValidationMessage.MustBeString })
-    readonly phone_number: string;
+    readonly phone_number?: string | null;
     
-    @IsString({ message: ValidationMessage.MustBeString })
-    readonly organization: string;
+    readonly organization?: string | null;
 }
