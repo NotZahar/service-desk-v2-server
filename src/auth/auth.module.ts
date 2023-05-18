@@ -4,12 +4,14 @@ import { CustomersModule } from 'src/customers/customers.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { authConfig } from './auth-config';
+import { EmployeesModule } from 'src/employees/employees.module';
 
 @Module({
   controllers: [AuthController],
   providers: [AuthService],
   imports: [
     forwardRef(() => CustomersModule),
+    forwardRef(() => EmployeesModule),
     JwtModule.register({
       secret: authConfig.SECRET,
       signOptions: {

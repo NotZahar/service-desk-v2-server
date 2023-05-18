@@ -8,11 +8,12 @@ import { RolesErrorMessage } from 'src/errors/roles-errors';
 
 @Injectable()
 export class CustomersService {
-    constructor(@InjectModel(CustomerModel) private customerRepository: typeof CustomerModel,
-                private roleService: RolesService) {}
+    constructor(
+        @InjectModel(CustomerModel) private customerRepository: typeof CustomerModel,
+        private rolesService: RolesService) {}
 
     async createCustomer(dto: CreateCustomerDto): Promise<CustomerModel> {
-        const role = await this.roleService.getRoleByName(Role.CUSTOMER);
+        const role = await this.rolesService.getRoleByName(Role.CUSTOMER);
         if (!role) throw new Error(RolesErrorMessage.RoleNotFound);
         const customer = await this.customerRepository.create({ ...dto, role_id: role.id });
         customer.role = role;

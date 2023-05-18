@@ -14,7 +14,7 @@ export class CustomersController {
         return this.customersService.createCustomer(customerDto);
     }
 
-    @Roles(Role.DISPATCHER)
+    @Roles(Role.DISPATCHER) // TODO:
     @UseGuards(RolesGuard)
     @Get()
     getAll() {
