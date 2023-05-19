@@ -36,9 +36,15 @@ export class AuthService {
         }
     }
 
-    async loginEmployee(loginEmployeeDto: LoginEmployeeDto) {
+    async loginEmployee(loginEmployeeDto: LoginEmployeeDto): Promise<{ 
+        token: string; 
+        role: string 
+    }> {
         const employee = await this.validateEmployee(loginEmployeeDto);
-        return this.generateTokenForEmployee(employee);
+        return {
+            token: await this.generateTokenForEmployee(employee),
+            role: employee.role.name
+        };
     }
 
     async registrationEmployee(createEmployeeDto: CreateEmployeeDto) : Promise<string | undefined> {
