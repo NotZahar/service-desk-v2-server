@@ -18,9 +18,19 @@ export class AuthService {
         private employeeService: EmployeesService,
         private jwtService: JwtService) {}
 
-    async loginCustomer(loginCustomerDto: LoginCustomerDto) {
+    async loginCustomer(loginCustomerDto: LoginCustomerDto): Promise<{
+        token: string;
+        role: string;
+        userId: string;
+        userName: string;
+    }> {
         const customer = await this.validateCustomer(loginCustomerDto);
-        return this.generateTokenForCustomer(customer);
+        return {
+            token: await this.generateTokenForCustomer(customer),
+            role: customer.role.name,
+            userId: customer.id,
+            userName: customer.first_name
+        };
     }
 
     async registrationCustomer(createCustomerDto: CreateCustomerDto) : Promise<string | undefined> {
@@ -37,13 +47,17 @@ export class AuthService {
     }
 
     async loginEmployee(loginEmployeeDto: LoginEmployeeDto): Promise<{ 
-        token: string; 
-        role: string 
+        token: string;
+        role: string;
+        userId: string;
+        userName: string;
     }> {
         const employee = await this.validateEmployee(loginEmployeeDto);
         return {
             token: await this.generateTokenForEmployee(employee),
-            role: employee.role.name
+            role: employee.role.name,
+            userId: employee.id,
+            userName: employee.first_name
         };
     }
 
@@ -62,7 +76,7 @@ export class AuthService {
 
     private async generateTokenForCustomer(customerModel: CustomerModel): Promise<string> {
         const payload = { 
-            email: customerModel.email, 
+            email: customerModel.email,
             id: customerModel.id,
             role: customerModel.role
         };
