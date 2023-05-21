@@ -11,6 +11,14 @@ import { EmployeeModel } from 'src/employees/employees.model';
 import { EmployeesService } from 'src/employees/employees.service';
 import { CreateEmployeeDto } from 'src/employees/dto/create-employee.dto';
 
+export interface ILoginResponseInfo {
+    token: string;
+    id: string;
+    name: string;
+    role: string;
+    email: string;
+}
+
 @Injectable()
 export class AuthService {
     constructor(
@@ -18,18 +26,14 @@ export class AuthService {
         private employeeService: EmployeesService,
         private jwtService: JwtService) {}
 
-    async loginCustomer(loginCustomerDto: LoginCustomerDto): Promise<{
-        token: string;
-        role: string;
-        userId: string;
-        userName: string;
-    }> {
+    async loginCustomer(loginCustomerDto: LoginCustomerDto): Promise<ILoginResponseInfo> {
         const customer = await this.validateCustomer(loginCustomerDto);
         return {
             token: await this.generateTokenForCustomer(customer),
+            id: customer.id,
+            name: customer.first_name,
             role: customer.role.name,
-            userId: customer.id,
-            userName: customer.first_name
+            email: customer.email
         };
     }
 
@@ -46,18 +50,14 @@ export class AuthService {
         }
     }
 
-    async loginEmployee(loginEmployeeDto: LoginEmployeeDto): Promise<{ 
-        token: string;
-        role: string;
-        userId: string;
-        userName: string;
-    }> {
+    async loginEmployee(loginEmployeeDto: LoginEmployeeDto): Promise<ILoginResponseInfo> {
         const employee = await this.validateEmployee(loginEmployeeDto);
         return {
             token: await this.generateTokenForEmployee(employee),
+            id: employee.id,
+            name: employee.first_name,
             role: employee.role.name,
-            userId: employee.id,
-            userName: employee.first_name
+            email: employee.email
         };
     }
 
