@@ -10,8 +10,8 @@ export class CustomersController {
     constructor(private customersService: CustomersService) {}    
 
     @Post()
-    create(@Body() customerDto: CreateCustomerDto) {
-        return this.customersService.createCustomer(customerDto);
+    create(@Body() createCustomerDto: CreateCustomerDto) {
+        return this.customersService.createCustomer(createCustomerDto);
     }
 
     @Roles(Role.DISPATCHER) // TODO:

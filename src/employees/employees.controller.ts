@@ -10,6 +10,7 @@ export class EmployeesController {
     constructor(private employeesService: EmployeesService) {}
 
     @Roles(Role.ADMIN, Role.DISPATCHER, Role.MANAGER, Role.SPECIALIST)
+    @UseGuards(RolesGuard)
     @Get(':id')
     getOne(@Param('id') id: string) {
         return this.employeesService.getOne(id);
@@ -18,7 +19,7 @@ export class EmployeesController {
     @Roles(Role.ADMIN)
     @UseGuards(RolesGuard)
     @Post()
-    create(@Body() employeeDto: CreateEmployeeDto) {
-        return this.employeesService.createEmployee(employeeDto);
+    create(@Body() createEmployeeDto: CreateEmployeeDto) {
+        return this.employeesService.createEmployee(createEmployeeDto);
     }
 }

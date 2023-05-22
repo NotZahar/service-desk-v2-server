@@ -3,7 +3,6 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { CustomersController } from './customers.controller';
 import { CustomerModel } from './customers.model';
 import { CustomersService } from './customers.service';
-import { RoleModel } from 'src/roles/roles.model';
 import { RolesModule } from 'src/roles/roles.module';
 import { AuthModule } from 'src/auth/auth.module';
 
@@ -11,8 +10,8 @@ import { AuthModule } from 'src/auth/auth.module';
   controllers: [CustomersController],
   providers: [CustomersService],
   imports: [
-    SequelizeModule.forFeature([CustomerModel, RoleModel]),
-    RolesModule,
+    SequelizeModule.forFeature([CustomerModel]),
+    forwardRef(() => RolesModule),
     forwardRef(() => AuthModule)
   ],
   exports: [CustomersService]

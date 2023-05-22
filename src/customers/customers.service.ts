@@ -12,12 +12,10 @@ export class CustomersService {
         @InjectModel(CustomerModel) private customerRepository: typeof CustomerModel,
         private rolesService: RolesService) {}
 
-    async createCustomer(dto: CreateCustomerDto): Promise<CustomerModel> {
+    async createCustomer(createCustomerDto: CreateCustomerDto) {
         const role = await this.rolesService.getRoleByName(Role.CUSTOMER);
         if (!role) throw new Error(RolesErrorMessage.RoleNotFound);
-        const customer = await this.customerRepository.create({ ...dto, role_id: role.id });
-        customer.role = role;
-        return customer;
+        await this.customerRepository.create({ ...createCustomerDto, role_id: role.id });
     }
 
     async getAllCustomers(): Promise<CustomerModel[]> {

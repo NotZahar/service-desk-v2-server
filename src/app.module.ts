@@ -7,6 +7,8 @@ import { RolesModule } from './roles/roles.module';
 import { RoleModel } from "./roles/roles.model";
 import { AuthModule } from './auth/auth.module';
 import { EmployeesModule } from './employees/employees.module';
+import { AppealsModule } from './appeals/appeals.module';
+import { AppealStatusesModule } from './appeal-statuses/appeal-statuses.module';
 
 @Module({
     controllers: [],
@@ -29,6 +31,8 @@ import { EmployeesModule } from './employees/employees.module';
         RolesModule,
         AuthModule,
         EmployeesModule,
+        AppealsModule,
+        AppealStatusesModule,
     ]
 })
 

@@ -18,12 +18,10 @@ export class EmployeesService {
         return employee;
     }
 
-    async createEmployee(dto: CreateEmployeeDto): Promise<EmployeeModel> {
-        const role = await this.rolesService.getRoleByName(dto.role_name);
+    async createEmployee(createEmployeeDto: CreateEmployeeDto) {
+        const role = await this.rolesService.getRoleByName(createEmployeeDto.role_name);
         if (!role) throw new Error(RolesErrorMessage.RoleNotFound);
-        const employee = await this.employeeRepository.create({ ...dto, role_id: role.id });
-        employee.role = role;
-        return employee;
+        await this.employeeRepository.create({ ...createEmployeeDto, role_id: role.id });
     }
 
     async getEmployeeByEmail(email: string) {

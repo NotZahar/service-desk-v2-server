@@ -37,13 +37,12 @@ export class AuthService {
         };
     }
 
-    async registrationCustomer(createCustomerDto: CreateCustomerDto) : Promise<string | undefined> {
+    async registrationCustomer(createCustomerDto: CreateCustomerDto) {
         try {
             const candidate = await this.customerService.getCustomerByEmail(createCustomerDto.email);
             if (candidate) throw new HttpException(AuthErrorMessage.UserWithThisEmailAlreadyExists, HttpStatus.BAD_REQUEST);
             const hashPassword = await bcrypt.hash(createCustomerDto.password, 10);
-            const customer = await this.customerService.createCustomer({ ...createCustomerDto, password: hashPassword });
-            return this.generateTokenForCustomer(customer);
+            await this.customerService.createCustomer({ ...createCustomerDto, password: hashPassword });
         } catch (error) {
             if (error instanceof HttpException) throw new HttpException(error.getResponse(), error.getStatus());
             throw new HttpException(AuthErrorMessage.InternalError, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -61,13 +60,12 @@ export class AuthService {
         };
     }
 
-    async registrationEmployee(createEmployeeDto: CreateEmployeeDto) : Promise<string | undefined> {
+    async registrationEmployee(createEmployeeDto: CreateEmployeeDto) {
         try {
             const candidate = await this.employeeService.getEmployeeByEmail(createEmployeeDto.email);
             if (candidate) throw new HttpException(AuthErrorMessage.UserWithThisEmailAlreadyExists, HttpStatus.BAD_REQUEST);
             const hashPassword = await bcrypt.hash(createEmployeeDto.password, 10);
-            const employee = await this.employeeService.createEmployee({ ...createEmployeeDto, password: hashPassword });
-            return this.generateTokenForEmployee(employee);
+            await this.employeeService.createEmployee({ ...createEmployeeDto, password: hashPassword });
         } catch (error) {
             if (error instanceof HttpException) throw new HttpException(error.getResponse(), error.getStatus());
             throw new HttpException(AuthErrorMessage.InternalError, HttpStatus.INTERNAL_SERVER_ERROR);

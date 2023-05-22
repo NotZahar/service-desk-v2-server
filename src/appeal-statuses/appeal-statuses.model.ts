@@ -1,12 +1,12 @@
 import sequelize from "sequelize";
 import { Column, DataType, Model, Table } from "sequelize-typescript";
 
-interface RoleCreationAttrs {
+interface AppealStatusCreationAttrs {
     name: string;
 }
 
-@Table({ tableName: 'roles' })
-export class RoleModel extends Model<RoleModel, RoleCreationAttrs> {
+@Table({ tableName: 'appeal-statuses' })
+export class AppealStatusModel extends Model<AppealStatusModel, AppealStatusCreationAttrs> {
     @Column({ type: DataType.UUID, primaryKey: true, defaultValue: sequelize.UUIDV4 })
     id: string;
 
