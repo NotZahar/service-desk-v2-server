@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
 import { Roles } from 'src/auth/roles-auth.decorator';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { Role } from 'src/roles/roles-list';
@@ -21,5 +21,33 @@ export class AppealsController {
     @Get()
     getAll() {
         return this.appealsService.getAllAppeals();
+    }
+
+    @Roles(Role.DISPATCHER)
+    @UseGuards(RolesGuard)
+    @Get('/filtered-by-theme')
+    getFilteredByTheme(@Query('pattern') pattern: string) {
+        return this.appealsService.getFilteredByTheme(pattern);
+    }
+
+    @Roles(Role.DISPATCHER)
+    @UseGuards(RolesGuard)
+    @Get('/filtered-by-date')
+    getFilteredByDate(@Query('pattern') pattern: string) {
+        return this.appealsService.getFilteredByDate(pattern);
+    }
+
+    @Roles(Role.DISPATCHER)
+    @UseGuards(RolesGuard)
+    @Get('/filtered-by-status')
+    getFilteredByStatus(@Query('pattern') pattern: string) {
+        return this.appealsService.getFilteredByStatus(pattern);
+    }
+
+    @Roles(Role.DISPATCHER)
+    @UseGuards(RolesGuard)
+    @Get('/filtered')
+    getFiltered(@Query('pattern') pattern: string) {
+        return this.appealsService.getFiltered(pattern);
     }
 }
