@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
+import { AppealStatusModel } from 'src/appeal-statuses/appeal-statuses.model';
 import { AppealModel } from './appeals.model';
 import { CreateAppealDto } from './dto/create-appeal.dto';
 
@@ -13,7 +14,14 @@ export class AppealsService {
     }
 
     async getAllAppeals(): Promise<AppealModel[]> {
-        const appeals = await this.appealRepository.findAll();
+        const appeals = await this.appealRepository.findAll({
+            include: [{
+                model: AppealStatusModel      
+            }],
+            order: [
+                ['date', 'DESC']
+            ]
+        });
         return appeals;
     }
 }

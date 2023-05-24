@@ -1,5 +1,6 @@
 export enum AppealStatus {
-    REJECTED = 'отклонено',
-    AT_WORK = 'в работе',
-    OPEN = 'открыто'
+    REJECTED = 'Oтклонено',
+    AT_WORK = 'В работе',
+    OPEN = 'Открыто',
+    CLOSED = 'Закрыто'
 }
