@@ -1,3 +1,3 @@
 export enum AppealErrorMessage {
-    AppealStatusNotFound = 'Ошибка создания обращения'
+    AppealStatusNotFound = 'Такого статуса не существует'
 }

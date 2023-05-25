@@ -1,9 +1,10 @@
-import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { Roles } from 'src/auth/roles-auth.decorator';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { Role } from 'src/roles/roles-list';
 import { AppealsService } from './appeals.service';
 import { CreateAppealDto } from './dto/create-appeal.dto';
+import { UpdateStatusDto } from './dto/update-status.dto';
 
 @Controller('appeals')
 export class AppealsController {
@@ -49,5 +50,12 @@ export class AppealsController {
     @Get('/filtered')
     getFiltered(@Query('pattern') pattern: string) {
         return this.appealsService.getFiltered(pattern);
+    }
+
+    @Roles(Role.DISPATCHER)
+    @UseGuards(RolesGuard)
+    @Put('/change-status')
+    changeStatus(@Body() updateStatusDto: UpdateStatusDto) {
+        return this.appealsService.updateStatus(updateStatusDto);
     }
 }

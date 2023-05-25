@@ -20,7 +20,7 @@ export class AppealModel extends Model<AppealModel, AppealCreationAttrs> {
     @Column({ type: DataType.STRING, allowNull: false })
     theme: string;
 
-    @Column({ type: DataType.STRING, allowNull: false })
+    @Column({ type: DataType.TEXT, allowNull: false })
     text: string;
 
     @Column({ type: DataType.STRING, allowNull: true })
