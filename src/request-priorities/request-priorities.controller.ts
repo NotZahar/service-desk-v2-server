@@ -16,6 +16,13 @@ export class RequestPrioritiesController {
         return this.requestPrioritiesService.createRequestPriority(createRequestPriorityDto);
     }
 
+    @Roles(Role.ADMIN, Role.DISPATCHER)
+    @UseGuards(RolesGuard)
+    @Get()
+    getAll() {
+        return this.requestPrioritiesService.getAll();
+    }
+
     @Roles(Role.ADMIN, Role.DISPATCHER, Role.MANAGER, Role.SPECIALIST)
     @UseGuards(RolesGuard)
     @Get('/:name')

@@ -11,6 +11,11 @@ export class RequestTypesService {
         await this.requestTypeRepository.create(createRequestTypeDto);
     }
 
+    async getAll() {
+        const types = await this.requestTypeRepository.findAll();
+        return types;
+    }
+
     async getRequestTypeByName(name: string): Promise<RequestTypeModel | null> {
         const requestType = await this.requestTypeRepository.findOne({ where: { name } });
         return requestType;

@@ -1,0 +1,1 @@
+export const pathToFileStorage: string = '../../file-storage'; // relative to this file

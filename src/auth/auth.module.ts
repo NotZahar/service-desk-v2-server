@@ -14,6 +14,8 @@ import { RequestsModule } from 'src/requests/requests.module';
 import { RolesModule } from 'src/roles/roles.module';
 import { UserCustomerMessagesModule } from 'src/user-customer-messages/user-customer-messages.module';
 import { UserInnerMessagesModule } from 'src/user-inner-messages/user-inner-messages.module';
+import { FilesModule } from 'src/files/files.module';
+import { KnowledgeBaseModule } from 'src/knowledge-base/knowledge-base.module';
 
 @Module({
   controllers: [AuthController],
@@ -30,6 +32,8 @@ import { UserInnerMessagesModule } from 'src/user-inner-messages/user-inner-mess
     forwardRef(() => RolesModule),
     forwardRef(() => UserCustomerMessagesModule),
     forwardRef(() => UserInnerMessagesModule),
+    forwardRef(() => FilesModule),
+    forwardRef(() => KnowledgeBaseModule),
     JwtModule.register({
       secret: authConfig.SECRET,
       signOptions: {

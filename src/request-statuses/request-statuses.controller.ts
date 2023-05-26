@@ -16,6 +16,13 @@ export class RequestStatusesController {
         return this.requestStatusesService.createRequestStatus(createRequestStatusDto);
     }
 
+    @Roles(Role.ADMIN, Role.DISPATCHER)
+    @UseGuards(RolesGuard)
+    @Get()
+    getAll() {
+        return this.requestStatusesService.getAll();
+    }
+
     @Roles(Role.ADMIN, Role.DISPATCHER, Role.MANAGER, Role.SPECIALIST)
     @UseGuards(RolesGuard)
     @Get('/:name')

@@ -24,6 +24,8 @@ import { UserInnerMessagesModule } from './user-inner-messages/user-inner-messag
 import { UserCustomerMessageModel } from "./user-customer-messages/user-customer-messages.model";
 import { UserInnerMessageModel } from "./user-inner-messages/user-inner-messages.model";
 import { RequestModel } from "./requests/requests.model";
+import { FilesModule } from './files/files.module';
+import { KnowledgeBaseModule } from './knowledge-base/knowledge-base.module';
 
 @Module({
     controllers: [],
@@ -65,6 +67,8 @@ import { RequestModel } from "./requests/requests.model";
         RequestsModule,
         UserCustomerMessagesModule,
         UserInnerMessagesModule,
+        FilesModule,
+        KnowledgeBaseModule,
     ]
 })
 

@@ -14,10 +14,10 @@ export class CustomersController {
         return this.customersService.createCustomer(createCustomerDto);
     }
 
-    @Roles(Role.DISPATCHER) // TODO:
+    @Roles(Role.ADMIN, Role.DISPATCHER)
     @UseGuards(RolesGuard)
     @Get()
     getAll() {
-        return this.customersService.getAllCustomers();
+        return this.customersService.getAll();
     }
 }

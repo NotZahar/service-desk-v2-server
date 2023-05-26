@@ -11,6 +11,11 @@ export class RequestPrioritiesService {
         await this.requestPriorityRepository.create(createRequestPriorityDto);
     }
 
+    async getAll() {
+        const priorities = await this.requestPriorityRepository.findAll();
+        return priorities;
+    }
+
     async getRequestPriorityByName(name: string): Promise<RequestPriorityModel | null> {
         const requestPriority = await this.requestPriorityRepository.findOne({ where: { name } });
         return requestPriority;

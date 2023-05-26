@@ -5,6 +5,9 @@ import { Role } from 'src/roles/roles-list';
 import { CustomerModel } from './customers.model';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { RolesErrorMessage } from 'src/errors/roles-errors';
+import sequelize from 'sequelize';
+
+const selectColumns = 'customers.id, email, role_id, first_name, second_name, patronymic, phone_number, organization, roles.name as role_name';
 
 @Injectable()
 export class CustomersService {
@@ -18,12 +21,15 @@ export class CustomersService {
         await this.customerRepository.create({ ...createCustomerDto, role_id: role.id });
     }
 
-    async getAllCustomers(): Promise<CustomerModel[]> {
-        const customers = await this.customerRepository.findAll({ 
-            include: { 
-                all: true 
-            } 
-        });
+    async getAll() {
+        const customers = await CustomerModel.sequelize?.query(
+            `SELECT ${selectColumns}
+            FROM customers
+            JOIN roles ON customers.role_id=roles.id
+            ORDER BY first_name ASC`, { 
+                type: sequelize.QueryTypes.SELECT
+            }
+        );
         return customers;
     }
 

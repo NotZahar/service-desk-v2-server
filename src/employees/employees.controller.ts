@@ -16,6 +16,13 @@ export class EmployeesController {
         return this.employeesService.getOne(id);
     }
 
+    @Roles(Role.ADMIN, Role.DISPATCHER)
+    @UseGuards(RolesGuard)
+    @Get()
+    getAll() {
+        return this.employeesService.getAll();
+    }
+
     @Roles(Role.ADMIN)
     @UseGuards(RolesGuard)
     @Post()

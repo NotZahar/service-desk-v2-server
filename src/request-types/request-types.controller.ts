@@ -16,6 +16,13 @@ export class RequestTypesController {
         return this.requestTypesService.createRequestType(createRequestTypeDto);
     }
 
+    @Roles(Role.ADMIN, Role.DISPATCHER)
+    @UseGuards(RolesGuard)
+    @Get()
+    getAll() {
+        return this.requestTypesService.getAll();
+    }
+
     @Roles(Role.ADMIN, Role.DISPATCHER, Role.MANAGER, Role.SPECIALIST)
     @UseGuards(RolesGuard)
     @Get('/:name')

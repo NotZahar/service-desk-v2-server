@@ -11,6 +11,11 @@ export class RequestStatusesService {
         await this.requestStatusRepository.create(createRequestStatusDto);
     }
 
+    async getAll() {
+        const statuses = await this.requestStatusRepository.findAll();
+        return statuses;
+    }
+
     async getRequestStatusByName(name: string): Promise<RequestStatusModel | null> {
         const requestStatus = await this.requestStatusRepository.findOne({ where: { name } });
         return requestStatus;
