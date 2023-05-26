@@ -1,7 +1,8 @@
 import sequelize from "sequelize";
-import { BelongsTo, Column, DataType, ForeignKey, Model, Table } from "sequelize-typescript";
+import { BelongsTo, Column, DataType, ForeignKey, HasOne, Model, Table } from "sequelize-typescript";
 import { AppealStatusModel } from "src/appeal-statuses/appeal-statuses.model";
 import { CustomerModel } from "src/customers/customers.model";
+import { RequestModel } from "src/requests/requests.model";
 
 interface AppealCreationAttrs {
     theme: string;
@@ -42,4 +43,7 @@ export class AppealModel extends Model<AppealModel, AppealCreationAttrs> {
 
     @BelongsTo(() => AppealStatusModel)
     status: AppealStatusModel;
+
+    @HasOne(() => RequestModel, 'appeal_id')
+    appeal: RequestModel;
 }

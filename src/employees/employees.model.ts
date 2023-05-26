@@ -1,6 +1,9 @@
 import sequelize from "sequelize";
-import { BelongsTo, Column, DataType, ForeignKey, Model, Table } from "sequelize-typescript";
+import { BelongsTo, Column, DataType, ForeignKey, HasMany, Model, Table } from "sequelize-typescript";
+import { RequestModel } from "src/requests/requests.model";
 import { RoleModel } from "src/roles/roles.model";
+import { UserCustomerMessageModel } from "src/user-customer-messages/user-customer-messages.model";
+import { UserInnerMessageModel } from "src/user-inner-messages/user-inner-messages.model";
 
 interface EmployeeCreationAttrs {
     email: string;
@@ -49,4 +52,16 @@ export class EmployeeModel extends Model<EmployeeModel, EmployeeCreationAttrs> {
     
     @BelongsTo(() => RoleModel)
     role: RoleModel;
+
+    @HasMany(() => UserCustomerMessageModel, 'employee_id')
+    user_customer_messages: UserCustomerMessageModel[];
+
+    @HasMany(() => UserInnerMessageModel, 'employee_id')
+    user_inner_messages: UserInnerMessageModel[];
+
+    @HasMany(() => RequestModel, 'controller_id')
+    controllers: RequestModel[];
+
+    @HasMany(() => RequestModel, 'executor_id')
+    executors: RequestModel;
 }

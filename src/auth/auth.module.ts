@@ -5,6 +5,15 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { authConfig } from './auth-config';
 import { EmployeesModule } from 'src/employees/employees.module';
+import { AppealsModule } from 'src/appeals/appeals.module';
+import { AppealStatusesModule } from 'src/appeal-statuses/appeal-statuses.module';
+import { RequestPrioritiesModule } from 'src/request-priorities/request-priorities.module';
+import { RequestStatusesModule } from 'src/request-statuses/request-statuses.module';
+import { RequestTypesModule } from 'src/request-types/request-types.module';
+import { RequestsModule } from 'src/requests/requests.module';
+import { RolesModule } from 'src/roles/roles.module';
+import { UserCustomerMessagesModule } from 'src/user-customer-messages/user-customer-messages.module';
+import { UserInnerMessagesModule } from 'src/user-inner-messages/user-inner-messages.module';
 
 @Module({
   controllers: [AuthController],
@@ -12,6 +21,15 @@ import { EmployeesModule } from 'src/employees/employees.module';
   imports: [
     forwardRef(() => CustomersModule),
     forwardRef(() => EmployeesModule),
+    forwardRef(() => AppealsModule),
+    forwardRef(() => AppealStatusesModule),
+    forwardRef(() => RequestPrioritiesModule),
+    forwardRef(() => RequestStatusesModule),
+    forwardRef(() => RequestTypesModule),
+    forwardRef(() => RequestsModule),
+    forwardRef(() => RolesModule),
+    forwardRef(() => UserCustomerMessagesModule),
+    forwardRef(() => UserInnerMessagesModule),
     JwtModule.register({
       secret: authConfig.SECRET,
       signOptions: {

@@ -1,6 +1,9 @@
 import sequelize from "sequelize";
-import { BelongsTo, Column, DataType, ForeignKey, Model, Table } from "sequelize-typescript";
+import { BelongsTo, Column, DataType, ForeignKey, HasMany, Model, Table } from "sequelize-typescript";
+import { AppealModel } from "src/appeals/appeals.model";
+import { RequestModel } from "src/requests/requests.model";
 import { RoleModel } from "src/roles/roles.model";
+import { UserCustomerMessageModel } from "src/user-customer-messages/user-customer-messages.model";
 
 interface CustomerCreationAttrs {
     email: string;
@@ -45,4 +48,13 @@ export class CustomerModel extends Model<CustomerModel, CustomerCreationAttrs> {
     
     @BelongsTo(() => RoleModel)
     role: RoleModel;
+
+    @HasMany(() => AppealModel, 'customer_id')
+    appeals: AppealModel[];
+
+    @HasMany(() => UserCustomerMessageModel, 'customer_id')
+    user_customer_messages: UserCustomerMessageModel[];
+
+    @HasMany(() => RequestModel, 'customer_id')
+    requests: RequestModel[];
 }

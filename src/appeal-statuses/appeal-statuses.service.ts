@@ -7,8 +7,8 @@ import { CreateAppealStatusDto } from './dto/create-appeal-status.dto';
 export class AppealStatusesService {
     constructor(@InjectModel(AppealStatusModel) private appealStatusRepository: typeof AppealStatusModel) {}
 
-    async createAppealStatus(dto: CreateAppealStatusDto) {
-        await this.appealStatusRepository.create(dto);
+    async createAppealStatus(createAppealStatusDto: CreateAppealStatusDto) {
+        await this.appealStatusRepository.create(createAppealStatusDto);
     }
 
     async getAppealStatusByName(name: string): Promise<AppealStatusModel | null> {
