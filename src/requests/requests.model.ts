@@ -23,7 +23,7 @@ interface RequestCreationAttrs {
     planned_date: Date;
     status_id: string;
     customer_id: string;
-    finish_date: Date;
+    finish_date: Date | null;
 }
 
 @Table({ tableName: 'requests' })
@@ -56,7 +56,7 @@ export class RequestModel extends Model<RequestModel, RequestCreationAttrs> {
     date: Date;
 
     @ForeignKey(() => AppealModel)
-    @Column({ type: DataType.UUID, allowNull: true })
+    @Column({ type: DataType.UUID, unique: true, allowNull: true })
     appeal_id: string;
 
     @Column({ type: DataType.STRING, allowNull: false })
@@ -77,13 +77,13 @@ export class RequestModel extends Model<RequestModel, RequestCreationAttrs> {
     @Column({ type: DataType.UUID, allowNull: false })
     customer_id: string;
 
-    @Column({ type: DataType.DATE, allowNull: false })
+    @Column({ type: DataType.DATE, allowNull: true })
     finish_date: Date;
 
-    @BelongsTo(() => EmployeeModel, 'id')
+    @BelongsTo(() => EmployeeModel)
     controller: EmployeeModel;
 
-    @BelongsTo(() => EmployeeModel, 'id')
+    @BelongsTo(() => EmployeeModel)
     executor: EmployeeModel;
 
     @BelongsTo(() => RequestPriorityModel)

@@ -3,3 +3,5 @@ export enum RequestType {
     INTERNAL = 'Внутренняя',
     SERVICE = 'Обслуживание'
 }
+
+export type requestTypeType = keyof typeof RequestType;

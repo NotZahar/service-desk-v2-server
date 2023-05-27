@@ -3,3 +3,5 @@ export enum RequestStatus {
     Failed = 'Провалена',
     AT_WORK = 'В работе'
 }
+
+export type requestStatusType = keyof typeof RequestStatus;

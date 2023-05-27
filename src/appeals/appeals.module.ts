@@ -13,6 +13,9 @@ import { AppealsService } from './appeals.service';
     SequelizeModule.forFeature([AppealModel]),
     forwardRef(() => AuthModule),
     AppealStatusesModule
+  ],
+  exports: [
+    AppealsService
   ]
 })
 export class AppealsModule {}
