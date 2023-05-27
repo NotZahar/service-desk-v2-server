@@ -6,7 +6,7 @@ interface RequestTypeCreationAttrs {
     name: string;
 }
 
-@Table({ tableName: 'request-statuses' })
+@Table({ tableName: 'request-types' })
 export class RequestTypeModel extends Model<RequestTypeModel, RequestTypeCreationAttrs> {
     @Column({ type: DataType.UUID, primaryKey: true, defaultValue: sequelize.UUIDV4 })
     id: string;
