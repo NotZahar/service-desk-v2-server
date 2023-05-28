@@ -11,7 +11,7 @@ export class EmployeesController {
 
     @Roles(Role.ADMIN, Role.DISPATCHER, Role.MANAGER, Role.SPECIALIST)
     @UseGuards(RolesGuard)
-    @Get(':id')
+    @Get('/:id')
     getOne(@Param('id') id: string) {
         return this.employeesService.getOne(id);
     }
