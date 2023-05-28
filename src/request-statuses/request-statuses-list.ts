@@ -1,6 +1,6 @@
 export enum RequestStatus {
     SUCCESSFULLY_CLOSED = 'Закрыта',
-    Failed = 'Провалена',
+    FAILED = 'Провалена',
     AT_WORK = 'В работе'
 }
 

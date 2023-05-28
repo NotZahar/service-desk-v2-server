@@ -1,10 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import sequelize from 'sequelize';
 import { AppealStatus } from 'src/appeal-statuses/appeal-statuses-list';
 import { AppealsService } from 'src/appeals/appeals.service';
 import { CustomersService } from 'src/customers/customers.service';
 import { EmployeesService } from 'src/employees/employees.service';
+import { RequestErrorMessage } from 'src/errors/request-errors copy';
 import { RequestPriority, requestPriorityType } from 'src/request-priorities/request-priorities-list';
 import { RequestPrioritiesService } from 'src/request-priorities/request-priorities.service';
 import { RequestStatus, requestStatusType } from 'src/request-statuses/request-statuses-list';
@@ -12,6 +13,10 @@ import { RequestStatusesService } from 'src/request-statuses/request-statuses.se
 import { RequestType, requestTypeType } from 'src/request-types/request-types-list';
 import { RequestTypesService } from 'src/request-types/request-types.service';
 import { CreateRequestDto } from './dto/create-request.dto';
+import { UpdateControllerDto } from './dto/update-controller.dto';
+import { UpdateExecutorDto } from './dto/update-executor.dto';
+import { UpdatePriorityDto } from './dto/update-priority.dto';
+import { UpdateStatusDto } from './dto/update-status.dto';
 import { RequestModel } from './requests.model';
 
 const selectColumns = `
@@ -222,5 +227,68 @@ export class RequestsService {
 
         await this.requestRepository.create(requestObj);
         if (createRequestDto.appeal_id) await this.appealsService.updateStatus({ id: createRequestDto.appeal_id, status_name: AppealStatus.AT_WORK });
+    }
+
+    async updateStatus(updateStatusDto: UpdateStatusDto) {
+        const newStatus = await this.requestStatusesService.getRequestStatusByName(updateStatusDto.status_name);
+        if (!newStatus) throw new HttpException(RequestErrorMessage.RequestStatusNotFound, HttpStatus.BAD_REQUEST);
+        
+        const finish_date = new Date();
+
+        await this.requestRepository.update({ 
+                status_id: newStatus.id,
+                finish_date: finish_date
+            },
+            { where: { id: updateStatusDto.id }}
+        );
+        
+        if (updateStatusDto.appeal_id && updateStatusDto.status_name !== RequestStatus.AT_WORK) {
+            await this.appealsService.updateStatus({ id: updateStatusDto.appeal_id, status_name: AppealStatus.CLOSED });
+        }
+
+        return { status_id: newStatus.id, status_name: newStatus.name, finish_date: finish_date };
+    }
+
+    async updatePriority(updatePriorityDto: UpdatePriorityDto) {
+        const newPriority = await this.requestPrioritiesService.getRequestPriorityByName(updatePriorityDto.priority_name);
+        if (!newPriority) throw new HttpException(RequestErrorMessage.RequestPriorityNotFound, HttpStatus.BAD_REQUEST);
+        await this.requestRepository.update(
+            { priority_id: newPriority.id },
+            { where: { id: updatePriorityDto.id }}
+        );
+    
+        return { priority_id: newPriority.id, priority_name: newPriority.name };
+    }
+
+    async updateController(updateControllerDto: UpdateControllerDto) {
+        const newController = await this.employeesService.getOne(updateControllerDto.controller_id);
+        if (!newController) throw new HttpException(RequestErrorMessage.RequestControllerNotFound, HttpStatus.BAD_REQUEST);
+        await this.requestRepository.update(
+            { controller_id: newController.id },
+            { where: { id: updateControllerDto.id }}
+        );
+
+        return { 
+            controller_id: newController.id,
+            controller_name: newController.first_name,
+            controller_email: newController.email,
+            controller_appointment: newController.appointment
+        };
+    }
+
+    async updateExecutor(updateExecutorDto: UpdateExecutorDto) {
+        const newExecutor = await this.employeesService.getOne(updateExecutorDto.executor_id);
+        if (!newExecutor) throw new HttpException(RequestErrorMessage.RequestExecutorNotFound, HttpStatus.BAD_REQUEST);
+        await this.requestRepository.update(
+            { executor_id: newExecutor.id },
+            { where: { id: updateExecutorDto.id }}
+        );
+
+        return { 
+            executor_id: newExecutor.id,
+            executor_name: newExecutor.first_name,
+            executor_email: newExecutor.email,
+            executor_appointment: newExecutor.appointment
+        };
     }
 }

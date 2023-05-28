@@ -1,8 +1,12 @@
-import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { Roles } from 'src/auth/roles-auth.decorator';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { Role } from 'src/roles/roles-list';
 import { CreateRequestDto } from './dto/create-request.dto';
+import { UpdateControllerDto } from './dto/update-controller.dto';
+import { UpdateExecutorDto } from './dto/update-executor.dto';
+import { UpdatePriorityDto } from './dto/update-priority.dto';
+import { UpdateStatusDto } from './dto/update-status.dto';
 import { RequestsService } from './requests.service';
 
 @Controller('requests')
@@ -65,10 +69,31 @@ export class RequestsController {
         return this.requestsService.getFiltered(pattern);
     }
 
-    // @Roles(Role.ADMIN, Role.DISPATCHER)
-    // @UseGuards(RolesGuard)
-    // @Put('/change-status')
-    // changeStatus(@Body() updateStatusDto: UpdateStatusDto) {
-    //     return this.appealsService.updateStatus(updateStatusDto);
-    // }
+    @Roles(Role.ADMIN, Role.DISPATCHER)
+    @UseGuards(RolesGuard)
+    @Put('/change-status')
+    changeStatus(@Body() updateStatusDto: UpdateStatusDto) {
+        return this.requestsService.updateStatus(updateStatusDto);
+    }
+
+    @Roles(Role.ADMIN, Role.DISPATCHER)
+    @UseGuards(RolesGuard)
+    @Put('/change-priority')
+    changePriority(@Body() updatePriorityDto: UpdatePriorityDto) {
+        return this.requestsService.updatePriority(updatePriorityDto);
+    }
+
+    @Roles(Role.ADMIN, Role.DISPATCHER)
+    @UseGuards(RolesGuard)
+    @Put('/change-controller')
+    changeController(@Body() updateControllerDto: UpdateControllerDto) {
+        return this.requestsService.updateController(updateControllerDto);
+    }
+
+    @Roles(Role.ADMIN, Role.DISPATCHER)
+    @UseGuards(RolesGuard)
+    @Put('/change-executor')
+    changeExecutor(@Body() updateExecutorDto: UpdateExecutorDto) {
+        return this.requestsService.updateExecutor(updateExecutorDto);
+    }
 }
