@@ -6,8 +6,22 @@ import { CustomerModel } from './customers.model';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { RolesErrorMessage } from 'src/errors/roles-errors';
 import sequelize from 'sequelize';
+import * as bcrypt from 'bcrypt';
+import { UpdateCustomerDto } from './dto/update-customer.dto';
 
-const selectColumns = 'customers.id, email, role_id, first_name, second_name, patronymic, phone_number, organization, roles.name as role_name';
+const selectColumns = `
+    customers.id, 
+    email, 
+    role_id, 
+    first_name, 
+    second_name, 
+    patronymic, 
+    phone_number, 
+    organization, 
+    roles.name as role_name`;
+
+const joins = `
+    JOIN roles ON customers.role_id=roles.id`;
 
 @Injectable()
 export class CustomersService {
@@ -24,12 +38,107 @@ export class CustomersService {
     async getAll() {
         const customers = await CustomerModel.sequelize?.query(
             `SELECT ${selectColumns}
+            
             FROM customers
-            JOIN roles ON customers.role_id=roles.id
+            ${joins}
+            
             ORDER BY first_name ASC`, { 
                 type: sequelize.QueryTypes.SELECT
             }
         );
+        return customers;
+    }
+
+    async getFilteredByName(pattern: string) {
+        const customers = await CustomerModel.sequelize?.query(
+            `SELECT 
+            ${selectColumns}
+         
+            FROM customers
+            ${joins}
+            
+            WHERE first_name ILIKE '%${pattern}%'
+            
+            ORDER BY first_name ASC`, { 
+                type: sequelize.QueryTypes.SELECT
+            }
+        );
+
+        return customers;
+    }
+
+    async getFilteredByEmail(pattern: string) {
+        const customers = await CustomerModel.sequelize?.query(
+            `SELECT 
+            ${selectColumns}
+         
+            FROM customers
+            ${joins}
+            
+            WHERE email ILIKE '%${pattern}%'
+            
+            ORDER BY first_name ASC`, { 
+                type: sequelize.QueryTypes.SELECT
+            }
+        );
+
+        return customers;
+    }
+
+    async getFilteredByPhoneNumber(pattern: string) {
+        const customers = await CustomerModel.sequelize?.query(
+            `SELECT 
+            ${selectColumns}
+         
+            FROM customers
+            ${joins}
+            
+            WHERE phone_number ILIKE '%${pattern}%'
+            
+            ORDER BY first_name ASC`, { 
+                type: sequelize.QueryTypes.SELECT
+            }
+        );
+
+        return customers;
+    }
+
+    async getFilteredByOrganization(pattern: string) {
+        const customers = await CustomerModel.sequelize?.query(
+            `SELECT 
+            ${selectColumns}
+         
+            FROM customers
+            ${joins}
+            
+            WHERE organization ILIKE '%${pattern}%'
+            
+            ORDER BY first_name ASC`, { 
+                type: sequelize.QueryTypes.SELECT
+            }
+        );
+
+        return customers;
+    }
+
+    async getFiltered(pattern: string) {
+        const customers = await CustomerModel.sequelize?.query(
+            `SELECT 
+            ${selectColumns}
+         
+            FROM customers
+            ${joins}
+            
+            WHERE (first_name ILIKE '%${pattern}%')
+                OR (email ILIKE '%${pattern}%')
+                OR (phone_number ILIKE '%${pattern}%')
+                OR (organization ILIKE '%${pattern}%')
+            
+            ORDER BY first_name ASC`, { 
+                type: sequelize.QueryTypes.SELECT
+            }
+        );
+
         return customers;
     }
 
@@ -39,5 +148,29 @@ export class CustomersService {
             include: { all: true }
         });
         return customer;
+    }
+   
+    async updateCustomer(updateCustomerDto: UpdateCustomerDto) {        
+        await this.customerRepository.update(
+            { 
+                email: updateCustomerDto.email,
+                first_name: updateCustomerDto.first_name || undefined,
+                second_name: updateCustomerDto.second_name || undefined,
+                patronymic: updateCustomerDto.patronymic || undefined,
+                phone_number: updateCustomerDto.phone_number || undefined,
+                organization: updateCustomerDto.organization || undefined 
+            },
+            { where: { id: updateCustomerDto.id }}
+        );
+
+        if (updateCustomerDto.password) {
+            const hashPassword = await bcrypt.hash(updateCustomerDto.password, 10);
+            await this.customerRepository.update(
+                { 
+                    password: hashPassword
+                },
+                { where: { id: updateCustomerDto.id }}
+            );
+        }
     }
 }
