@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/sequelize';
 import sequelize from 'sequelize';
 import { EmployeesErrorMessage } from 'src/errors/employee-errors';
 import { RolesErrorMessage } from 'src/errors/roles-errors';
+import { RoleModel } from 'src/roles/roles.model';
 import { RolesService } from 'src/roles/roles.service';
 import { CreateEmployeeDto } from './dto/create-employee.dto';
 import { EmployeeModel } from './employees.model';
@@ -42,7 +43,7 @@ export class EmployeesService {
     async getEmployeeByEmail(email: string) {
         const employee = await this.employeeRepository.findOne({
             where: { email: email },
-            include: { all: true }
+            include: RoleModel
         });
         return employee;
     }

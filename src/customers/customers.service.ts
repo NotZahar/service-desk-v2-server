@@ -8,6 +8,7 @@ import { RolesErrorMessage } from 'src/errors/roles-errors';
 import sequelize from 'sequelize';
 import * as bcrypt from 'bcrypt';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
+import { RoleModel } from 'src/roles/roles.model';
 
 const selectColumns = `
     customers.id, 
@@ -145,7 +146,7 @@ export class CustomersService {
     async getCustomerByEmail(email: string) {
         const customer = await this.customerRepository.findOne({
             where: { email },
-            include: { all: true }
+            include: RoleModel
         });
         return customer;
     }
