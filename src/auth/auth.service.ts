@@ -10,6 +10,7 @@ import { LoginEmployeeDto } from 'src/employees/dto/login-employee.dto';
 import { EmployeeModel } from 'src/employees/employees.model';
 import { EmployeesService } from 'src/employees/employees.service';
 import { CreateEmployeeDto } from 'src/employees/dto/create-employee.dto';
+import { authConfig } from './auth-config';
 
 export interface ILoginResponseInfo {
     token: string;
@@ -41,7 +42,7 @@ export class AuthService {
         try {
             const candidate = await this.customerService.getCustomerByEmail(createCustomerDto.email);
             if (candidate) throw new HttpException(AuthErrorMessage.UserWithThisEmailAlreadyExists, HttpStatus.BAD_REQUEST);
-            const hashPassword = await bcrypt.hash(createCustomerDto.password, 10);
+            const hashPassword = await bcrypt.hash(createCustomerDto.password, authConfig.HASH_SALT);
             await this.customerService.createCustomer({ ...createCustomerDto, password: hashPassword });
         } catch (error) {
             if (error instanceof HttpException) throw new HttpException(error.getResponse(), error.getStatus());
@@ -64,7 +65,7 @@ export class AuthService {
         try {
             const candidate = await this.employeeService.getEmployeeByEmail(createEmployeeDto.email);
             if (candidate) throw new HttpException(AuthErrorMessage.UserWithThisEmailAlreadyExists, HttpStatus.BAD_REQUEST);
-            const hashPassword = await bcrypt.hash(createEmployeeDto.password, 10);
+            const hashPassword = await bcrypt.hash(createEmployeeDto.password, authConfig.HASH_SALT);
             await this.employeeService.createEmployee({ ...createEmployeeDto, password: hashPassword });
         } catch (error) {
             if (error instanceof HttpException) throw new HttpException(error.getResponse(), error.getStatus());

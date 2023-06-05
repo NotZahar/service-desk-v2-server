@@ -9,6 +9,7 @@ import sequelize from 'sequelize';
 import * as bcrypt from 'bcrypt';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
 import { RoleModel } from 'src/roles/roles.model';
+import { authConfig } from 'src/auth/auth-config';
 
 const selectColumns = `
     customers.id, 
@@ -165,7 +166,7 @@ export class CustomersService {
         );
 
         if (updateCustomerDto.password) {
-            const hashPassword = await bcrypt.hash(updateCustomerDto.password, 10);
+            const hashPassword = await bcrypt.hash(updateCustomerDto.password, authConfig.HASH_SALT);
             await this.customerRepository.update(
                 { 
                     password: hashPassword

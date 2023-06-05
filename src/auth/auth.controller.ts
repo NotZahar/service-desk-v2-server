@@ -27,7 +27,7 @@ export class AuthController {
         return this.authService.loginEmployee(loginEmployeeDto);
     }
 
-    @Roles(Role.ADMIN)
+    @Roles(Role.ADMIN, Role.DISPATCHER)
     @UseGuards(RolesGuard)
     @Post('/registration-employee')
     registrationEmployee(@Body() createEmployeeDto: CreateEmployeeDto) {
