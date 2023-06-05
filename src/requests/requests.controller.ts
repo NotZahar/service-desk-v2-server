@@ -27,6 +27,41 @@ export class RequestsController {
         return this.requestsService.getAll();
     }
 
+    @Roles(Role.ADMIN, Role.CUSTOMER)
+    @UseGuards(RolesGuard)
+    @Get('/customer')
+    getCustomerAll(@Query('id') id: string) {
+        return this.requestsService.getCustomerAll(id);
+    }
+
+    @Roles(Role.ADMIN, Role.CUSTOMER)
+    @UseGuards(RolesGuard)
+    @Get('/customer/filtered')
+    getCustomerFiltered(@Query('id') id: string, @Query('pattern') pattern: string) {
+        return this.requestsService.getCustomerFiltered(id, pattern);
+    }
+
+    @Roles(Role.ADMIN, Role.CUSTOMER)
+    @UseGuards(RolesGuard)
+    @Get('/customer/filtered-by-theme')
+    getCustomerFilteredByTheme(@Query('id') id: string, @Query('pattern') pattern: string) {
+        return this.requestsService.getCustomerFilteredByTheme(id, pattern);
+    }
+
+    @Roles(Role.ADMIN, Role.CUSTOMER)
+    @UseGuards(RolesGuard)
+    @Get('/customer/filtered-by-registration-date')
+    getCustomerFilteredByRegistrationDate(@Query('id') id: string, @Query('pattern') pattern: string) {
+        return this.requestsService.getCustomerFilteredByRegistrationDate(id, pattern);
+    }
+
+    @Roles(Role.ADMIN, Role.CUSTOMER)
+    @UseGuards(RolesGuard)
+    @Get('/customer/filtered-by-status')
+    getCustomerFilteredByStatus(@Query('id') id: string, @Query('pattern') pattern: string) {
+        return this.requestsService.getCustomerFilteredByStatus(id, pattern);
+    }
+
     @Roles(Role.ADMIN, Role.DISPATCHER)
     @UseGuards(RolesGuard)
     @Get('/filtered-by-theme')

@@ -80,7 +80,7 @@ export class RequestsService {
     }
 
     async getAll() {
-        const appeals = await RequestModel.sequelize?.query(
+        const requests = await RequestModel.sequelize?.query(
             `SELECT 
             ${selectColumns}
          
@@ -91,11 +91,11 @@ export class RequestsService {
                 type: sequelize.QueryTypes.SELECT
             }
         );
-        return appeals;
+        return requests;
     }
 
     async getFilteredByTheme(pattern: string) {
-        const appeals = await RequestModel.sequelize?.query(
+        const requests = await RequestModel.sequelize?.query(
             `SELECT 
             ${selectColumns}
          
@@ -108,11 +108,11 @@ export class RequestsService {
                 type: sequelize.QueryTypes.SELECT
             }
         );
-        return appeals;
+        return requests;
     }
 
     async getFilteredByPriority(pattern: string) {
-        const appeals = await RequestModel.sequelize?.query(
+        const requests = await RequestModel.sequelize?.query(
             `SELECT 
             ${selectColumns}
          
@@ -125,11 +125,11 @@ export class RequestsService {
                 type: sequelize.QueryTypes.SELECT
             }
         );
-        return appeals;
+        return requests;
     }
 
     async getFilteredByPlannedDate(pattern: string) {
-        const appeals = await RequestModel.sequelize?.query(
+        const requests = await RequestModel.sequelize?.query(
             `SELECT 
             ${selectColumns}
          
@@ -142,11 +142,11 @@ export class RequestsService {
                 type: sequelize.QueryTypes.SELECT
             }
         );
-        return appeals;
+        return requests;
     }
 
     async getFilteredByRegistrationDate(pattern: string) {
-        const appeals = await RequestModel.sequelize?.query(
+        const requests = await RequestModel.sequelize?.query(
             `SELECT 
             ${selectColumns}
          
@@ -159,11 +159,11 @@ export class RequestsService {
                 type: sequelize.QueryTypes.SELECT
             }
         );
-        return appeals;
+        return requests;
     }
 
     async getFilteredByStatus(pattern: string) {
-        const appeals = await RequestModel.sequelize?.query(
+        const requests = await RequestModel.sequelize?.query(
             `SELECT 
             ${selectColumns}
          
@@ -176,11 +176,11 @@ export class RequestsService {
                 type: sequelize.QueryTypes.SELECT
             }
         );
-        return appeals;
+        return requests;
     }
 
     async getFiltered(pattern: string) {
-        const appeals = await RequestModel.sequelize?.query(
+        const requests = await RequestModel.sequelize?.query(
             `SELECT 
             ${selectColumns}
          
@@ -197,7 +197,96 @@ export class RequestsService {
                 type: sequelize.QueryTypes.SELECT
             }
         );
-        return appeals;
+        return requests;
+    }
+
+    async getCustomerAll(id: string) {
+        const requests = await RequestModel.sequelize?.query(
+            `SELECT 
+            ${selectColumns}
+         
+            FROM requests
+            ${joins}
+        
+            WHERE customer_id='${id}'
+            ORDER BY requests.date DESC`, { 
+                type: sequelize.QueryTypes.SELECT
+            }
+        );
+
+        return requests;
+    }
+
+    async getCustomerFilteredByTheme(id: string, pattern: string) {
+        const requests = await RequestModel.sequelize?.query(
+            `SELECT 
+            ${selectColumns}
+         
+            FROM requests
+            ${joins}
+            
+            WHERE (customer_id='${id}') AND (theme ILIKE '%${pattern}%')
+            ORDER BY requests.date DESC`, { 
+                type: sequelize.QueryTypes.SELECT
+            }
+        );
+
+        return requests;
+    }
+
+    async getCustomerFilteredByRegistrationDate(id: string, pattern: string) {
+        const requests = await RequestModel.sequelize?.query(
+            `SELECT 
+            ${selectColumns}
+         
+            FROM requests
+            ${joins}
+            
+            WHERE (customer_id='${id}') AND (date::VARCHAR ILIKE '%${pattern}%')
+            ORDER BY requests.date DESC`, { 
+                type: sequelize.QueryTypes.SELECT
+            }
+        );
+
+        return requests;
+    }
+
+    async getCustomerFilteredByStatus(id: string, pattern: string) {
+        const requests = await RequestModel.sequelize?.query(
+            `SELECT 
+            ${selectColumns}
+         
+            FROM requests
+            ${joins}
+            
+            WHERE (customer_id='${id}') AND (statuses.name ILIKE '%${pattern}%')
+            ORDER BY requests.date DESC`, { 
+                type: sequelize.QueryTypes.SELECT
+            }
+        );
+
+        return requests;
+    }
+
+    async getCustomerFiltered(id: string, pattern: string) {
+        const requests = await RequestModel.sequelize?.query(
+            `SELECT 
+            ${selectColumns}
+         
+            FROM requests
+            ${joins}
+            
+            WHERE (customer_id='${id}') AND (
+                (theme ILIKE '%${pattern}%')
+                OR (date::VARCHAR ILIKE '%${pattern}%')
+                OR (statuses.name ILIKE '%${pattern}%')
+            )
+            ORDER BY requests.date DESC`, { 
+                type: sequelize.QueryTypes.SELECT
+            }
+        );
+
+        return requests;
     }
 
     async createRequest(createRequestDto: CreateRequestDto) {
