@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import sequelize from 'sequelize';
+import { IUserCustomerMessage } from 'src/types/models/user-customer-message';
 import { CreateUserCustomerMessageDto } from './dto/create-user-customer-message.dto';
 import { UserCustomerMessageModel } from './user-customer-messages.model';
 
@@ -22,7 +23,7 @@ export class UserCustomerMessagesService {
     }
 
     async getAll(request_id: string) {
-        const messages = await UserCustomerMessageModel.sequelize?.query(`
+        const messages: IUserCustomerMessage[] | undefined = await UserCustomerMessageModel.sequelize?.query(`
         (SELECT 
             messages.id, 
             messages.date, 
@@ -38,7 +39,7 @@ export class UserCustomerMessagesService {
             JOIN employees ON messages.employee_id=employees.id
             JOIN requests ON messages.request_id=requests.id
             WHERE messages.request_id='${request_id}'
-            ORDER BY messages.date DESC)
+            ORDER BY messages.date ASC)
         UNION ALL
         (SELECT 
             messages.id, 
@@ -55,10 +56,22 @@ export class UserCustomerMessagesService {
             JOIN customers ON messages.customer_id=customers.id
             JOIN requests ON messages.request_id=requests.id
             WHERE messages.request_id='${request_id}'
-            ORDER BY messages.date DESC)`, { 
+            ORDER BY messages.date ASC)`, { 
                 type: sequelize.QueryTypes.SELECT
             }
         );
+
+        messages?.sort((a, b) => {
+            if (a.date < b.date) {
+                return -1;
+            }
+
+            if (a.date > b.date) {
+                return 1;
+            }
+
+            return 0;
+        });
 
         return messages;
     }

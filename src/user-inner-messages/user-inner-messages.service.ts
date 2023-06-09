@@ -36,7 +36,7 @@ export class UserInnerMessagesService {
             JOIN employees ON messages.employee_id=employees.id
             JOIN requests ON messages.request_id=requests.id
             WHERE messages.request_id='${request_id}'
-            ORDER BY messages.date DESC`, { 
+            ORDER BY messages.date ASC`, { 
                 type: sequelize.QueryTypes.SELECT
             }
         );
