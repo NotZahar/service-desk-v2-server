@@ -9,14 +9,14 @@ import { UserInnerMessagesService } from './user-inner-messages.service';
 export class UserInnerMessagesController {
     constructor(private userInnerMessagesService: UserInnerMessagesService) {}
 
-    @Roles(Role.CUSTOMER, Role.DISPATCHER)
+    @Roles(Role.ADMIN, Role.DISPATCHER, Role.SPECIALIST, Role.MANAGER)
     @UseGuards(RolesGuard)
     @Post()
     create(@Body() createUserInnerMessageDto: CreateUserInnerMessageDto) {
         return this.userInnerMessagesService.createMessage(createUserInnerMessageDto);
     }
 
-    @Roles(Role.CUSTOMER, Role.DISPATCHER)
+    @Roles(Role.ADMIN, Role.DISPATCHER, Role.SPECIALIST, Role.MANAGER)
     @UseGuards(RolesGuard)
     @Get('/:request_id')
     getAll(@Param('request_id') request_id: string) {

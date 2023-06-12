@@ -27,11 +27,25 @@ export class RequestsController {
         return this.requestsService.getAll();
     }
 
+    @Roles(Role.ADMIN, Role.SPECIALIST, Role.MANAGER)
+    @UseGuards(RolesGuard)
+    @Get('/specialist')
+    getSpecialistAll(@Query('id') id: string) {
+        return this.requestsService.getSpecialistAll(id);
+    }
+
     @Roles(Role.ADMIN, Role.CUSTOMER)
     @UseGuards(RolesGuard)
     @Get('/customer')
     getCustomerAll(@Query('id') id: string) {
         return this.requestsService.getCustomerAll(id);
+    }
+
+    @Roles(Role.ADMIN, Role.SPECIALIST, Role.MANAGER)
+    @UseGuards(RolesGuard)
+    @Get('/specialist/one')
+    getSpecialistOne(@Query('spec_id') spec_id: string, @Query('req_id') req_id: string) {
+        return this.requestsService.getSpecialistOne(spec_id, req_id);
     }
 
     @Roles(Role.ADMIN, Role.CUSTOMER)
@@ -102,6 +116,48 @@ export class RequestsController {
     @Get('/filtered')
     getFiltered(@Query('pattern') pattern: string) {
         return this.requestsService.getFiltered(pattern);
+    }
+
+    @Roles(Role.ADMIN, Role.SPECIALIST, Role.MANAGER)
+    @UseGuards(RolesGuard)
+    @Get('/specialist/filtered-by-theme')
+    getSpecialistFilteredByTheme(@Query('id') id: string, @Query('pattern') pattern: string) {
+        return this.requestsService.getSpecialistFilteredByTheme(id, pattern);
+    }
+
+    @Roles(Role.ADMIN, Role.SPECIALIST, Role.MANAGER)
+    @UseGuards(RolesGuard)
+    @Get('/specialist/filtered-by-priority')
+    getSpecialistFilteredByPriority(@Query('id') id: string, @Query('pattern') pattern: string) {
+        return this.requestsService.getSpecialistFilteredByPriority(id, pattern);
+    }
+
+    @Roles(Role.ADMIN, Role.SPECIALIST, Role.MANAGER)
+    @UseGuards(RolesGuard)
+    @Get('/specialist/filtered-by-planned-date')
+    getSpecialistFilteredByPlannedDate(@Query('id') id: string, @Query('pattern') pattern: string) {
+        return this.requestsService.getSpecialistFilteredByPlannedDate(id, pattern);
+    }
+
+    @Roles(Role.ADMIN, Role.SPECIALIST, Role.MANAGER)
+    @UseGuards(RolesGuard)
+    @Get('/specialist/filtered-by-registration-date')
+    getSpecialistFilteredByRegistrationDate(@Query('id') id: string, @Query('pattern') pattern: string) {
+        return this.requestsService.getSpecialistFilteredByRegistrationDate(id, pattern);
+    }
+
+    @Roles(Role.ADMIN, Role.SPECIALIST, Role.MANAGER)
+    @UseGuards(RolesGuard)
+    @Get('/specialist/filtered-by-status')
+    getSpecialistFilteredByStatus(@Query('id') id: string, @Query('pattern') pattern: string) {
+        return this.requestsService.getSpecialistFilteredByStatus(id, pattern);
+    }
+
+    @Roles(Role.ADMIN, Role.SPECIALIST, Role.MANAGER)
+    @UseGuards(RolesGuard)
+    @Get('/specialist/filtered')
+    getSpecialistFiltered(@Query('id') id: string, @Query('pattern') pattern: string) {
+        return this.requestsService.getSpecialistFiltered(id, pattern);
     }
 
     @Roles(Role.ADMIN, Role.DISPATCHER)

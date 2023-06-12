@@ -94,6 +94,57 @@ export class RequestsService {
         return requests;
     }
 
+    async getCustomerAll(id: string) {
+        const requests = await RequestModel.sequelize?.query(
+            `SELECT 
+            ${selectColumns}
+         
+            FROM requests
+            ${joins}
+        
+            WHERE customer_id='${id}'
+            ORDER BY requests.date DESC`, { 
+                type: sequelize.QueryTypes.SELECT
+            }
+        );
+
+        return requests;
+    }
+
+    async getSpecialistAll(id: string) {
+        const requests = await RequestModel.sequelize?.query(
+            `SELECT 
+            ${selectColumns}
+         
+            FROM requests
+            ${joins}
+        
+            WHERE (controller_id='${id}') OR (executor_id='${id}')
+            ORDER BY requests.date DESC`, { 
+                type: sequelize.QueryTypes.SELECT
+            }
+        );
+
+        return requests;
+    }
+
+    async getSpecialistOne(spec_id: string, req_id: string) {
+        const request = await RequestModel.sequelize?.query(
+            `SELECT 
+            ${selectColumns}
+         
+            FROM requests
+            ${joins}
+        
+            WHERE requests.id='${req_id}' AND (controller_id='${spec_id}' OR executor_id='${spec_id}')
+            ORDER BY requests.date DESC`, { 
+                type: sequelize.QueryTypes.SELECT
+            }
+        );
+
+        return request;
+    }
+
     async getFilteredByTheme(pattern: string) {
         const requests = await RequestModel.sequelize?.query(
             `SELECT 
@@ -200,23 +251,6 @@ export class RequestsService {
         return requests;
     }
 
-    async getCustomerAll(id: string) {
-        const requests = await RequestModel.sequelize?.query(
-            `SELECT 
-            ${selectColumns}
-         
-            FROM requests
-            ${joins}
-        
-            WHERE customer_id='${id}'
-            ORDER BY requests.date DESC`, { 
-                type: sequelize.QueryTypes.SELECT
-            }
-        );
-
-        return requests;
-    }
-
     async getCustomerFilteredByTheme(id: string, pattern: string) {
         const requests = await RequestModel.sequelize?.query(
             `SELECT 
@@ -286,6 +320,120 @@ export class RequestsService {
             }
         );
 
+        return requests;
+    }
+
+    async getSpecialistFilteredByTheme(id: string, pattern: string) {
+        const requests = await RequestModel.sequelize?.query(
+            `SELECT 
+            ${selectColumns}
+         
+            FROM requests
+            ${joins}
+            
+            WHERE (controller_id='${id}' OR executor_id='${id}') 
+                AND theme ILIKE '%${pattern}%'
+            
+            ORDER BY requests.date DESC`, { 
+                type: sequelize.QueryTypes.SELECT
+            }
+        );
+        return requests;
+    }
+
+    async getSpecialistFilteredByPriority(id: string, pattern: string) {
+        const requests = await RequestModel.sequelize?.query(
+            `SELECT 
+            ${selectColumns}
+         
+            FROM requests
+            ${joins}
+            
+            WHERE (controller_id='${id}' OR executor_id='${id}')
+                AND priorities.name ILIKE '%${pattern}%'
+            
+            ORDER BY requests.date DESC`, { 
+                type: sequelize.QueryTypes.SELECT
+            }
+        );
+        return requests;
+    }
+
+    async getSpecialistFilteredByPlannedDate(id: string, pattern: string) {
+        const requests = await RequestModel.sequelize?.query(
+            `SELECT 
+            ${selectColumns}
+         
+            FROM requests
+            ${joins}
+            
+            WHERE (controller_id='${id}' OR executor_id='${id}')
+                AND planned_date::VARCHAR ILIKE '%${pattern}%'
+            
+            ORDER BY requests.date DESC`, { 
+                type: sequelize.QueryTypes.SELECT
+            }
+        );
+        return requests;
+    }
+
+    async getSpecialistFilteredByRegistrationDate(id: string, pattern: string) {
+        const requests = await RequestModel.sequelize?.query(
+            `SELECT 
+            ${selectColumns}
+         
+            FROM requests
+            ${joins}
+            
+            WHERE (controller_id='${id}' OR executor_id='${id}')
+                AND date::VARCHAR ILIKE '%${pattern}%'
+            
+            ORDER BY requests.date DESC`, { 
+                type: sequelize.QueryTypes.SELECT
+            }
+        );
+        return requests;
+    }
+
+    async getSpecialistFilteredByStatus(id: string, pattern: string) {
+        const requests = await RequestModel.sequelize?.query(
+            `SELECT 
+            ${selectColumns}
+         
+            FROM requests
+            ${joins}
+            
+            WHERE (controller_id='${id}' OR executor_id='${id}')
+                AND statuses.name ILIKE '%${pattern}%'
+            
+            ORDER BY requests.date DESC`, { 
+                type: sequelize.QueryTypes.SELECT
+            }
+        );
+        return requests;
+    }
+
+    async getSpecialistFiltered(id: string, pattern: string) {
+        const requests = await RequestModel.sequelize?.query(
+            `SELECT 
+            ${selectColumns}
+         
+            FROM requests
+            ${joins}
+            
+            WHERE (controller_id='${id}' OR executor_id='${id}')
+                AND (
+                    (theme ILIKE '%${pattern}%')
+                    OR (priorities.name ILIKE '%${pattern}%')
+                    OR (planned_date::VARCHAR ILIKE '%${pattern}%')
+                    OR (date::VARCHAR ILIKE '%${pattern}%')
+                    OR (statuses.name ILIKE '%${pattern}%')
+                ) 
+            
+            ORDER BY requests.date DESC`, { 
+                type: sequelize.QueryTypes.SELECT
+            }
+        );
         return requests;
     }
 

@@ -9,14 +9,14 @@ import { UserCustomerMessagesService } from './user-customer-messages.service';
 export class UserCustomerMessagesController {
     constructor(private userCustomerMessagesService: UserCustomerMessagesService) {}
 
-    @Roles(Role.CUSTOMER, Role.DISPATCHER)
+    @Roles(Role.ADMIN, Role.DISPATCHER, Role.CUSTOMER)
     @UseGuards(RolesGuard)
     @Post()
     create(@Body() createCustomerMessageDto: CreateUserCustomerMessageDto) {
         return this.userCustomerMessagesService.createMessage(createCustomerMessageDto);
     }
 
-    @Roles(Role.CUSTOMER, Role.DISPATCHER)
+    @Roles(Role.ADMIN, Role.DISPATCHER, Role.CUSTOMER)
     @UseGuards(RolesGuard)
     @Get('/:request_id')
     getAll(@Param('request_id') request_id: string) {
