@@ -8,6 +8,10 @@ const baseContractsFolder: string = `${baseFolder}/Договоры`;
 export class KnowledgeBaseService {
     constructor(private filesService: FilesService) {}
 
+    async getBase() {
+        return await this.filesService.getKBaseContent(baseFolder);
+    } 
+
     async getContracts() {
         return await this.filesService.getDirContent({ dirPath: baseContractsFolder });
     }

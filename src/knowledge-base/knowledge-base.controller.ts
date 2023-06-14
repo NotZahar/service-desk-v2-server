@@ -8,7 +8,12 @@ import { KnowledgeBaseService } from './knowledge-base.service';
 export class KnowledgeBaseController {
     constructor(private knowledgeBaseService: KnowledgeBaseService) {}
 
-    asdas
+    @Roles(Role.ADMIN, Role.DISPATCHER, Role.MANAGER, Role.SPECIALIST)
+    @UseGuards(RolesGuard)
+    @Get()
+    getBase() {
+        return this.knowledgeBaseService.getBase();
+    }
 
     @Roles(Role.ADMIN, Role.DISPATCHER)
     @UseGuards(RolesGuard)
