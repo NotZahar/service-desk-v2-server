@@ -10,7 +10,11 @@ export class KnowledgeBaseService {
 
     async getBase() {
         return await this.filesService.getKBaseContent(baseFolder);
-    } 
+    }
+
+    async getFileData(path: string) {
+        return await this.filesService.getFileContent({ filePath: baseFolder + path });
+    }
 
     async getContracts() {
         return await this.filesService.getDirContent({ dirPath: baseContractsFolder });

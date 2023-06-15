@@ -7,6 +7,7 @@ import { GetFileContentDto } from './dto/get-file-content.dto';
 import { CreateFileDto } from './dto/create-file.dto';
 import { CreateDirDto } from './dto/create-dir.dto';
 import { GetDirContentDto } from './dto/get-dir-content.dto';
+import { FileInfoNode } from 'src/types/models/file-info-node';
 
 @Injectable()
 export class FilesService {
@@ -79,80 +80,38 @@ export class FilesService {
 
     async getKBaseContent(kbasePath: string) {
         try {
-            let treeData: FileInfoNode[] = [
-                {
-                    title: 'parent 0',
-                    key: '0-0',
-                    children: [
-                        { title: 'leaf 0-0', key: '0-0-0', isLeaf: true },
-                        { title: 'leaf 0-1', key: '0-0-1', isLeaf: true }
-                    ]
-                },
-                {
-                    title: 'parent 1',
-                    key: '0-1',
-                    children: [
-                        { title: 'leaf 1-0', key: '0-1-0', isLeaf: true },
-                        { title: 'leaf 1-1', key: '0-1-1', isLeaf: true }
-                    ]
-                }
-            ];
+            const dirPrefix = path.resolve(__dirname, pathToFileStorage, kbasePath);
 
-
-            let getFilesInfo = (dir, files_) => {
-                files_ = files_ || []
-                
-                let files = fs.readdirSync(dir)
-                
-                for (let i in files) {
-                    let name = dir + '/' + files[i]
+            const getAllFiles = (dirPath: string) => {
+                let arrayOfFiles: FileInfoNode[] = [];
+                const files = fs.readdirSync(dirPath);
+              
+                files.forEach((file) => {
+                    const fullFileOrDirPath = path.resolve(dirPath, file);
                     
-                    let newFile = {
-                        id: idCounter++,
-                        parent: dir,
-                        text: files[i],
-                        isFile: true
-                    }
-            
-                    if (fs.statSync(name).isDirectory()) {
-                        newFile.isFile = false
-                        allFiles.push(newFile)
-                        dirMap.set(name, idCounter - 1)
-                        getFilesInfo(name, files_)
+                    if (fs.statSync(fullFileOrDirPath).isDirectory()) {
+                        let dirInfo: FileInfoNode = {
+                            title: file,
+                            key: fullFileOrDirPath.slice(dirPrefix.length)
+                        };
+
+                        dirInfo.children = JSON.parse(JSON.stringify(getAllFiles(fullFileOrDirPath)));
+                        arrayOfFiles.push(dirInfo);
                     } else {
-                        allFiles.push(newFile)
-                        files_.push(name)
+                        let fileInfo: FileInfoNode = {
+                            title: file,
+                            key: fullFileOrDirPath.slice(dirPrefix.length),
+                            isLeaf: true
+                        };
+
+                        arrayOfFiles.push(fileInfo);
                     }
-                }
+                });
+              
+                return arrayOfFiles;
+            };
             
-                return files_
-            }
-            
-            let allFiles = []
-            let idCounter = 0
-            let dirMap = new Map()
-            
-            getFilesInfo(config.pathToKBase)
-            for (let file of allFiles) {
-                file.parent = (undefined === dirMap.get(file.parent) ? '#' : dirMap.get(file.parent) + 'dir')
-            }
-
-            for (let file of allFiles) {
-                if (!file.isFile) {
-                    file.id += 'dir' 
-                }
-            }
-
-            res.json(allFiles)
-
-
-            const dirPath = path.resolve(__dirname, pathToFileStorage, kbasePath);
-
-            if (!fs.statSync(dirPath).isDirectory()) {
-                throw new HttpException(FilesErrorMessage.NotDir, HttpStatus.BAD_REQUEST);
-            }
-            
-            return fs.readdirSync(dirPath);
+            return getAllFiles(dirPrefix);
         } catch (err) {
             console.log(err);
             if (err instanceof HttpException) throw new HttpException(err.getResponse(), err.getStatus());

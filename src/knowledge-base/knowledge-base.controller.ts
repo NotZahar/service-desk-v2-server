@@ -1,4 +1,4 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Controller, Get, Query, UseGuards } from '@nestjs/common';
 import { Roles } from 'src/auth/roles-auth.decorator';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { Role } from 'src/roles/roles-list';
@@ -13,6 +13,13 @@ export class KnowledgeBaseController {
     @Get()
     getBase() {
         return this.knowledgeBaseService.getBase();
+    }
+
+    @Roles(Role.ADMIN, Role.DISPATCHER, Role.MANAGER, Role.SPECIALIST)
+    @UseGuards(RolesGuard)
+    @Get('/file')
+    getFileData(@Query('path') path: string) {
+        return this.knowledgeBaseService.getFileData(path);
     }
 
     @Roles(Role.ADMIN, Role.DISPATCHER)
