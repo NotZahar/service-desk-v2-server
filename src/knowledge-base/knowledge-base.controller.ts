@@ -1,7 +1,8 @@
-import { Controller, Get, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
 import { Roles } from 'src/auth/roles-auth.decorator';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { Role } from 'src/roles/roles-list';
+import { CreateFileDto } from './dto/create-file.dto';
 import { KnowledgeBaseService } from './knowledge-base.service';
 
 @Controller('knowledge-base')
@@ -27,5 +28,12 @@ export class KnowledgeBaseController {
     @Get('/contracts')
     getContracts() {
         return this.knowledgeBaseService.getContracts();
+    }
+
+    @Roles(Role.ADMIN, Role.DISPATCHER, Role.MANAGER, Role.SPECIALIST)
+    @UseGuards(RolesGuard)
+    @Post('/file')
+    createFile(@Body() createFileDto: CreateFileDto) {
+        return this.knowledgeBaseService.createFile(createFileDto);
     }
 }
