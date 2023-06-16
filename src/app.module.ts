@@ -26,6 +26,7 @@ import { UserInnerMessageModel } from "./user-inner-messages/user-inner-messages
 import { RequestModel } from "./requests/requests.model";
 import { FilesModule } from './files/files.module';
 import { KnowledgeBaseModule } from './knowledge-base/knowledge-base.module';
+import { StatsModule } from './stats/stats.module';
 
 @Module({
     controllers: [],
@@ -69,6 +70,7 @@ import { KnowledgeBaseModule } from './knowledge-base/knowledge-base.module';
         UserInnerMessagesModule,
         FilesModule,
         KnowledgeBaseModule,
+        StatsModule,
     ]
 })
 
